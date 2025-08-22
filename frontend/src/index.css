@@ -1,0 +1,17 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+header, footer {
+  padding: 1rem;
+  background: #f5f5f5;
+}
+
+nav a {
+  margin-right: 1rem;
+}
+
+.error {
+  color: red;
+}
