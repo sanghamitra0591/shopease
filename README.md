@@ -1,125 +1,137 @@
-# 🛒 ShopEase — E-commerce Web Application
+# 🛍️ Shopease – MERN Stack
 
-ShopEase is a modern full-stack e-commerce platform built with:
-- 🔙 **Backend**: Node.js, Express.js, MongoDB
-- 🔜 **Frontend**: React (Vite) or Vue.js (Vite)
-- 🔐 Authentication, 🛍️ Product Management, 🧑‍💼 Roles (User/Merchant), 🗂️ Categories
+A full-stack e-commerce platform built with **Node.js, Express, MongoDB, React, Redux Toolkit, and Material UI**.  
+It supports both **Users** and **Merchants** with authentication, product management, and filtering capabilities.
 
 ---
 
-## Deployed URL 
-- Frontend : https://shopease-sooty.vercel.app
-- Backend : https://shopease-ppme.onrender.com
+## 🌐 Deployed URLs
 
-## 📁 Project Structure
-
-shopease/
-│
-├── frontend/ # Client app (React or Vue + Vite)
-├── backend/ # Express + MongoDB REST API
-└── README.md # Project documentation
-
+- 🔗 **Frontend**: [https://shopease-sooty.vercel.app](https://shopease-sooty.vercel.app)
+- 🔗 **Backend API**: [https://shopease-ppme.onrender.com](https://shopease-ppme.onrender.com)
 
 ---
 
-## ⚙️ Features
+## ⚙️ Tech Stack
 
-### ✅ Frontend
-- Built using **React** or **Vue** with **Vite**
-- Login, Register, Profile Update
-- Product listings with filters, sorting, pagination
-- View product details
-- Category browsing
-- Merchant dashboard to manage products
+**Frontend:**
+- React + Vite
+- Redux Toolkit
+- Material UI + React Icons
+- Vanilla CSS (atomic structure)
 
-### ✅ Backend
-- REST API with **Express.js**
-- **MongoDB** via **Mongoose**
+**Backend:**
+- Node.js
+- Express.js
+- MongoDB + Mongoose
+- JWT Authentication
+- bcrypt (password hashing)
+- dotenv (env variables)
+
+---
+
+## 👥 Roles & Functionality
+
+### 🔐 Authentication
+- JWT-based Login & Registration
 - Role-based access (User / Merchant)
-- Authentication using JWT
-- File/image uploads
-- Category + Subcategory system
-- Full product CRUD for merchants
-- API filtering, search, and pagination
+- Secure password storage using `bcrypt`
+- Protected routes for merchant-only actions
+- Logout functionality
 
 ---
 
-## 🚀 Getting Started
+## 🧑‍💼 Merchant Features
 
-### 1. Clone the repository
+| Feature               | Description                                    |
+|------------------------|------------------------------------------------|
+| Add Product           | Name, Category, Subcategory, Price, Location   |
+| Edit Product          | Only own products                              |
+| Delete Product        | With confirmation                              |
+| View Own Products     | Paginated & manageable                         |
+| Dashboard UI          | Responsive, clean layout with edit/delete      |
 
+---
+
+## 🙋‍♂️ User Features
+
+| Feature                 | Description                                |
+|--------------------------|--------------------------------------------|
+| Browse Products         | All listed products                        |
+| Filter Products         | By Category, Subcategory, Location, Price  |
+| Search Bar              | Search by product name or description      |
+| Pagination              | Navigate through products                  |
+| Responsive UI           | Clean and mobile-friendly                  |
+
+---
+
+## 📦 API Endpoints
+
+### 🔐 Auth
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+
+### 🛍️ Products
+- `GET /api/products` – All products with filters + pagination
+- `POST /api/products` – (Merchant only) Create
+- `PUT /api/products/:productId` – (Merchant only) Update
+- `DELETE /api/products/:productId` – (Merchant only) Delete
+- `GET /api/products/merchant` – Products by current merchant
+
+> ✅ All routes are secured using JWT Auth Middleware and Role Middleware.
+
+---
+
+## 📁 Folder Structure Highlights
+
+### Backend (Express - MVC)
+backend/
+├── controllers/
+├── models/
+├── routes/
+├── middlewares/
+├── .env
+
+shell
+Copy code
+
+### Frontend (React + Atomic + Redux)
+client/
+├── src/
+│ ├── components/ (atoms, molecules, organisms)
+│ ├── redux/
+│ │ ├── slices/
+│ │ ├── store.js
+│ ├── pages/
+│ ├── App.jsx
+
+yaml
+Copy code
+
+---
+
+## 🛠️ Setup (Optional – if not using deployed version)
+
+### Backend
 ```bash
-git clone https://github.com/yourusername/shopease.git
-cd shopease
-
-🧱 Backend Setup (/backend)
-📦 Install dependencies
 cd backend
 npm install
-
-🔑 Create .env file
-cp .env.example .env
-
-
-Update .env with your MongoDB URI, JWT secret, etc.:
-
-PORT=5000
-MONGODB_URI=mongodb://localhost:27017/ecommerce-app
-JWT_SECRET=your_secret_key
-
-▶️ Start development server
 npm run dev
+Create .env file:
 
-
-The backend will run on: http://localhost:5000
-
-🖥️ Frontend Setup (/frontend)
-📦 Install dependencies
-cd ../frontend
+env
+Copy code
+PORT=3000
+MONGO_URI=your-mongodb-connection-string
+JWT_SECRET=your-secret-key
+Frontend
+bash
+Copy code
+cd client
 npm install
-
-▶️ Start development server
 npm run dev
+Create .env file:
 
-
-The frontend will run on: http://localhost:5173
-
-Make sure the frontend is sending requests to the correct backend URL (http://localhost:5000). If needed, update your frontend environment file:
-
-VITE_API_URL=http://localhost:5000/api
-
-🔒 CORS Note
-
-Ensure your backend (/backend/server.js) includes proper CORS handling:
-
-const corsOptions = {
-  origin: 'http://localhost:5173',
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-};
-
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
-
-✅ API Endpoints (Examples)
-Method	Endpoint	Description
-POST	/api/auth/register	Register a new user
-POST	/api/auth/login	User login
-GET	/api/products	Get all products
-POST	/api/products	Create product (merchant)
-GET	/api/categories	List categories
-
-🛠️ Tech Stack
-
-Frontend: React or Vue, Vite, Axios
-
-Backend: Node.js, Express.js, Mongoose, JWT
-
-Database: MongoDB
-
-Other: Multer (uploads), bcryptjs, cors
-
-👨‍💻 Author
-
-Made with ❤️ by Sanghamitra satpathy
+env
+Copy code
+VITE_API_URL=http://localhost:3000/api

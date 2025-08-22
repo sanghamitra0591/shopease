@@ -1,86 +1,46 @@
-// backend/src/server.js
+require('dotenv').config();
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const path = require('path');
-
-// Import routes
-const authRoutes = require('./routes/authRoutes');
-const userRoutes = require('./routes/userRoutes');
-const productRoutes = require('./routes/productRoutes');
-const categoryRoutes = require('./routes/categoryRoutes');
-
-// Import middleware
-const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
+const PORT = process.env.PORT || 3000;
+const MONGO_URI = process.env.MONGO_URI;
 
-// MongoDB connection string - replace with your MongoDB URI
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/ecommerce-app';
+mongoose.connect(MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log('MongoDB connected successfully'))
+.catch(err => {
+  console.error('MongoDB connection error:', err);
+  process.exit(1);
+});
 
-// Connect to MongoDB
-const connectDB = async () => {
-  try {
-    const conn = await mongoose.connect(MONGODB_URI);
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
-  } catch (error) {
-    console.error('Database connection error:', error.message);
-    process.exit(1);
-  }
+const corsOptions = {
+  origin: 'http://localhost:5174',
+  credentials: true,
 };
+app.use(cors(corsOptions));
 
-// Connect Database
-connectDB();
+const authRoutes = require('./routes/authRoutes');
+const productRoutes = require('./routes/productRoutes');
 
-// Middleware
-app.use(cors({
-  origin: '*',
-  credentials: true
-}));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
-// Serve uploaded files
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
-
-// Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
-app.use('/api/categories', categoryRoutes);
 
-// Health check route
-app.get('/api/health', (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: 'Server is running successfully',
-    timestamp: new Date().toISOString()
-  });
+app.use((req, res) => {
+  res.status(404).json({ message: 'Route not found' });
 });
 
-// Error handling middleware (should be last)
-app.use(errorHandler);
-
-// Handle 404 routes
-app.use('/*path', (req, res) => {
-  res.status(404).json({
-    success: false,
-    message: 'Route not found'
-  });
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: 'Internal server error' });
 });
 
-const PORT = process.env.PORT || 5000;
-
-const server = app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT} in ${process.env.NODE_ENV} mode`);
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
-
-// Handle unhandled promise rejections
-process.on('unhandledRejection', (err, promise) => {
-  console.log(`Error: ${err.message}`);
-  server.close(() => {
-    process.exit(1);
-  });
-});
-
-module.exports = app;
