@@ -7,6 +7,10 @@ ShopEase is a modern full-stack e-commerce platform built with:
 
 ---
 
+## Deployed URL 
+- Frontend : https://shopease-sooty.vercel.app
+- Backend : https://shopease-ppme.onrender.com
+
 ## 📁 Project Structure
 
 shopease/
